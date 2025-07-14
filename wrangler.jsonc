@@ -1,21 +1,36 @@
-/**
- * For more details on how to configure Wrangler, refer to:
- * https://developers.cloudflare.com/workers/wrangler/configuration/
- */ {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "graston-llm-chat-app",
-  "main": "src/index.ts",
-  "compatibility_date": "2025-04-01",
-  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
-  "assets": {
-    "binding": "ASSETS",
-    "directory": "./public"
-  },
-  "observability": {
-    "enabled": true
-  },
-  "ai": {
-    "binding": "AI"
-  },
-  "upload_source_maps": true
-}
+# wrangler.toml
+
+# Required schema and base config
+$schema = "node_modules/wrangler/config-schema.json"
+name = "graston-llm-chat-app"
+main = "src/index.ts"
+compatibility_date = "2025-04-01"
+
+# Enables Node.js features and fetch policy
+compatibility_flags = ["nodejs_compat", "global_fetch_strictly_public"]
+
+# Serve static files
+[assets]
+binding = "ASSETS"
+directory = "./public"
+
+# Enable Cloudflare logs and dashboards
+[observability]
+enabled = true
+
+# Enable OpenAI binding
+[ai]
+binding = "AI"
+
+# Upload source maps
+upload_source_maps = true
+
+# Secure environment variables for use in Worker code
+[vars]
+WP_USERNAME = "brian.mclaughlin"
+WP_APP_PASSWORD = "gcnW 9riF ecs9 4Naj Vbkx 0Lee" # ← Replace with real value or use secret manager
+
+# Route mapping to your custom GPT lookup endpoint
+[[routes]]
+pattern = "/api/lookup-user-id"
+script = "lookup-user-id"
